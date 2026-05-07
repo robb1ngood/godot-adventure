@@ -797,7 +797,7 @@ tile_map_data = PackedByteArray("AAD+/wQAAAAEAAIAAAD9/wYAAAAEAAIAAAD8/wgAAAAEAAI
 tile_set = SubResource("TileSet_kbjbd")
 
 [node name="Player" parent="ObstacleLayer" unique_id=1225540767 instance=ExtResource("3_12ovb")]
-position = Vector2(250, 132)
+position = Vector2(67, 86)
 
 [node name="Camera2D" type="Camera2D" parent="ObstacleLayer/Player" unique_id=792531820]
 position = Vector2(3.3333435, 0)

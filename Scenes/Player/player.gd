@@ -3,10 +3,10 @@ class_name Player
 
 @export var move_speed: float = 100
 
-func _ready() -> void:
-	pass
+func _ready():
+	position = SceneManager.player_spawn_position
 
-func _process(delta: float) -> void:
+func _process(delta):
 	var move_vector: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	velocity = move_vector * move_speed

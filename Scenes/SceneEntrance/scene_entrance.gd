@@ -20,3 +20,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	pass
+
+
+func _on_puzzle_button_unpressed() -> void:
+	pass # Replace with function body.

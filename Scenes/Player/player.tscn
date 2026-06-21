@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bljr4h25o1wdj" path="res://Scenes/Player/player.gd" id="1_a3d8c"]
 [ext_resource type="Texture2D" uid="uid://cfm84nsvii21j" path="res://Ninja Adventure - Asset Pack/Actor/Characters/Noble/SpriteSheet.png" id="2_a3d8c"]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a3d8c"]
-radius = 5.0
-height = 12.0
+[ext_resource type="Texture2D" uid="uid://ca74e3ua14kfw" path="res://Ninja Adventure - Asset Pack/Ui/LifeReceptacle/heart.png" id="3_mtuoh"]
+[ext_resource type="Texture2D" uid="uid://co5y5x5atr0oj" path="res://Ninja Adventure - Asset Pack/Items/Scroll/ScrollEmpty.png" id="3_xpcdj"]
+[ext_resource type="Texture2D" uid="uid://ck8lnb7oa1b7m" path="res://Ninja Adventure - Asset Pack/Items/Weapons/BigSword/Sprite.png" id="5_htcer"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xpcdj"]
 atlas = ExtResource("2_a3d8c")
@@ -142,15 +141,170 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1382311881]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a3d8c"]
+radius = 5.0
+height = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xpcdj"]
+radius = 4.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a3d8c"]
+size = Vector2(8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aqm4k"]
+atlas = ExtResource("3_mtuoh")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rcvs5"]
+atlas = ExtResource("3_mtuoh")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8ma5"]
+atlas = ExtResource("3_mtuoh")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eksi1"]
+atlas = ExtResource("3_mtuoh")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jincj"]
+atlas = ExtResource("3_mtuoh")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rqdc0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aqm4k")
+}],
+"loop": true,
+"name": &"0_hp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rcvs5")
+}],
+"loop": true,
+"name": &"1_hp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h8ma5")
+}],
+"loop": true,
+"name": &"2_hp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eksi1")
+}],
+"loop": true,
+"name": &"3_hp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jincj")
+}],
+"loop": true,
+"name": &"4_hp",
+"speed": 5.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mtuoh"]
+font_size = 48
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dd0ac"]
+size = Vector2(10, 19)
+
+[node name="Player" type="CharacterBody2D" unique_id=1382311881]
+collision_layer = 2
+collision_mask = 7
 motion_mode = 1
 script = ExtResource("1_a3d8c")
 move_speed = 60.0
+push_strength = 300.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=451528780]
+sprite_frames = SubResource("SpriteFrames_aqm4k")
+animation = &"move_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=403696077]
 position = Vector2(0, 2)
 shape = SubResource("CapsuleShape2D_a3d8c")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=451528780]
-sprite_frames = SubResource("SpriteFrames_aqm4k")
-animation = &"move_up"
+[node name="HitboxArea2D" type="Area2D" parent="." unique_id=985624360]
+collision_layer = 2
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea2D" unique_id=1453449117]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_xpcdj")
+debug_color = Color(0.98998386, 0, 0.2894907, 0.41960785)
+
+[node name="InteractArea2D" type="Area2D" parent="." unique_id=1036884536]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea2D" unique_id=1527628757]
+shape = SubResource("RectangleShape2D_a3d8c")
+debug_color = Color(1.973361e-06, 0.6481314, 0.19998801, 0.41960785)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1024725421]
+
+[node name="HPBar" type="AnimatedSprite2D" parent="CanvasLayer" unique_id=825364390]
+unique_name_in_owner = true
+position = Vector2(64.000015, 49.000004)
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_rqdc0")
+animation = &"4_hp"
+
+[node name="Panel" type="Panel" parent="CanvasLayer" unique_id=1286322819]
+offset_left = 122.0
+offset_top = 16.0
+offset_right = 275.0
+offset_bottom = 86.0
+
+[node name="TreasureLabel" type="Label" parent="CanvasLayer/Panel" unique_id=361170105]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 87.0
+offset_bottom = 70.0
+text = "0"
+label_settings = SubResource("LabelSettings_mtuoh")
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Panel" unique_id=209060508]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 4.0
+offset_right = 147.0
+offset_bottom = 65.0
+texture = ExtResource("3_xpcdj")
+
+[node name="Sword" type="Sprite2D" parent="." unique_id=1962040483]
+visible = false
+position = Vector2(0, -15)
+texture = ExtResource("5_htcer")
+
+[node name="SwordArea2D" type="Area2D" parent="Sword" unique_id=2139276678]
+unique_name_in_owner = true
+collision_layer = 2
+collision_mask = 16
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/SwordArea2D" unique_id=1842279987]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_dd0ac")
+
+[node name="AttackDurationTimer" type="Timer" parent="." unique_id=2114700522]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="body_entered" from="HitboxArea2D" to="." method="_on_hitbox_area_2d_body_entered"]
+[connection signal="body_entered" from="InteractArea2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="InteractArea2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="Sword/SwordArea2D" to="." method="_on_sword_area_2d_body_entered"]
+[connection signal="timeout" from="AttackDurationTimer" to="." method="_on_attack_duration_timer_timeout"]

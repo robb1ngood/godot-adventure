@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://2t88xov470fe"]
 
+[ext_resource type="Script" uid="uid://c2fid7v7ag5lm" path="res://Scenes/Enemies/slime_enemy.gd" id="1_5uyk1"]
 [ext_resource type="Texture2D" uid="uid://b7rw8mqyi0fi3" path="res://Ninja Adventure - Asset Pack/Actor/Monsters/Slime3/Slime3.png" id="1_p6sbt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sv1en"]
+radius = 58.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5uyk1"]
 atlas = ExtResource("1_p6sbt")
@@ -22,6 +26,15 @@ radius = 7.071068
 
 [node name="SlimeEnemy" type="CharacterBody2D" unique_id=222290903]
 collision_layer = 16
+script = ExtResource("1_5uyk1")
+
+[node name="PlayerDetectArea2D" type="Area2D" parent="." unique_id=1879503699]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectArea2D" unique_id=2105925451]
+shape = SubResource("CircleShape2D_sv1en")
+debug_color = Color(0, 0.6494856, 0.15422234, 0.41960785)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=314912024]
 sprite_frames = SubResource("SpriteFrames_sv1en")
@@ -29,3 +42,5 @@ sprite_frames = SubResource("SpriteFrames_sv1en")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2044086910]
 position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_1u7tg")
+
+[connection signal="body_entered" from="PlayerDetectArea2D" to="." method="_on_player_detect_area_2d_body_entered"]

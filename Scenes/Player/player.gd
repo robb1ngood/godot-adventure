@@ -4,6 +4,8 @@ class_name Player
 @export var move_speed: float = 100
 @export var push_strength: float = 10
 
+var is_attacking: bool = false
+
 func _ready():
 	update_treasure_label()
 	update_hp_bar()
@@ -11,7 +13,8 @@ func _ready():
 		position = SceneManager.player_spawn_position
 
 func _physics_process(delta):
-	move_player()
+	if not is_attacking:
+		move_player()
 	push_block()
 	update_treasure_label()
 	if Input.is_action_just_pressed("interact"):
@@ -96,6 +99,22 @@ func attack():
 	$AttackDurationTimer.start()
 	$Sword.visible = true
 	%SwordArea2D.monitoring = true
+	is_attacking = true
+	velocity = Vector2(0, 0)
+	
+	var player_animation: String = $AnimatedSprite2D.animation
+	if player_animation == "move_right":
+		$AnimatedSprite2D.play("attack_right")
+		$AnimationPlayer.play("attack_right")
+	if player_animation == "move_left":
+		$AnimatedSprite2D.play("attack_left")
+		$AnimationPlayer.play("attack_left")
+	if player_animation == "move_up":
+		$AnimatedSprite2D.play("attack_up")
+		$AnimationPlayer.play("attack_up")
+	if player_animation == "move_down":
+		$AnimatedSprite2D.play("attack_down")
+		$AnimationPlayer.play("attack_down")
 
 func _on_sword_area_2d_body_entered(body: Node2D) -> void:
 	body.queue_free()
@@ -103,3 +122,14 @@ func _on_sword_area_2d_body_entered(body: Node2D) -> void:
 func _on_attack_duration_timer_timeout() -> void:
 	$Sword.visible = false
 	%SwordArea2D.monitoring = false
+	is_attacking = false
+
+	var player_animation: String = $AnimatedSprite2D.animation
+	if player_animation == "attack_right":
+		$AnimatedSprite2D.play("move_right")
+	if player_animation == "attack_left":
+		$AnimatedSprite2D.play("move_left")
+	if player_animation == "attack_up":
+		$AnimatedSprite2D.play("move_up")
+	if player_animation == "attack_down":
+		$AnimatedSprite2D.play("move_down")

@@ -14,12 +14,19 @@ func _ready():
 		position = SceneManager.player_spawn_position
 
 func _physics_process(delta):
+	if SceneManager.player_hp <= 0:
+		return
+	
 	if not is_attacking:
 		move_player()
+		
 	push_block()
+	
 	update_treasure_label()
+	
 	if Input.is_action_just_pressed("interact"):
 		attack()
+	
 	move_and_slide()
 	
 func move_player():
@@ -86,8 +93,12 @@ func _on_hitbox_area_2d_body_entered(body: Node2D) -> void:
 	var knockback_strength: float = 200
 	velocity += knockback_direction * knockback_strength
 	
-		
 func die():
+	$AnimatedSprite2D.play("death")
+	if not $DeathTimer.is_stopped():
+		$DeathTimer.start()
+	
+func _on_death_timer_timeout() -> void:
 	SceneManager.player_hp = 4
 	get_tree().call_deferred("reload_current_scene")
 
@@ -103,10 +114,13 @@ func update_hp_bar():
 	else:
 		%HPBar.play("0_hp")
 		
-func attack():
-	$AttackDurationTimer.start()
+func attack(): 
+	if not $AttackDurationTimer.is_stopped():
+		return
+	
 	$Sword.visible = true
 	%SwordArea2D.monitoring = true
+	$AttackDurationTimer.start()
 	is_attacking = true
 	velocity = Vector2(0, 0)
 	

@@ -23,6 +23,10 @@ region = Rect2(48, 0, 16, 16)
 atlas = ExtResource("2_dd0ac")
 region = Rect2(16, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ur3l4"]
+atlas = ExtResource("2_a3d8c")
+region = Rect2(0, 96, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_xpcdj"]
 atlas = ExtResource("2_a3d8c")
 region = Rect2(0, 0, 16, 16)
@@ -119,6 +123,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"attack_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ur3l4")
+}],
+"loop": true,
+"name": &"death",
 "speed": 5.0
 }, {
 "frames": [{
@@ -298,6 +310,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_gk6dx"]
 resource_name = "attack_down"
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -426,7 +439,7 @@ push_strength = 300.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=451528780]
 sprite_frames = SubResource("SpriteFrames_aqm4k")
-animation = &"attack_down"
+animation = &"death"
 autoplay = "move_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=403696077]
@@ -504,8 +517,12 @@ one_shot = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1075504450]
 libraries/ = SubResource("AnimationLibrary_gk6dx")
 
+[node name="DeathTimer" type="Timer" parent="." unique_id=1205738753]
+one_shot = true
+
 [connection signal="body_entered" from="HitboxArea2D" to="." method="_on_hitbox_area_2d_body_entered"]
 [connection signal="body_entered" from="InteractArea2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="InteractArea2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="Sword/SwordArea2D" to="." method="_on_sword_area_2d_body_entered"]
 [connection signal="timeout" from="AttackDurationTimer" to="." method="_on_attack_duration_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

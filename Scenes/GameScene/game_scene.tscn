@@ -911,7 +911,7 @@ limit_right = 380
 limit_bottom = 280
 
 [node name="SlimeEnemy" parent="." unique_id=222290903 instance=ExtResource("15_rpdpv")]
-position = Vector2(-40, -22)
+position = Vector2(-62, -96)
 
 [connection signal="pressed" from="PuzzleButton" to="LockedDoor" method="_on_puzzle_button_pressed"]
 [connection signal="unpressed" from="PuzzleButton" to="LockedDoor" method="_on_puzzle_button_unpressed"]

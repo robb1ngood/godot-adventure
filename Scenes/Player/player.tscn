@@ -482,6 +482,7 @@ offset_bottom = 65.0
 texture = ExtResource("3_xpcdj")
 
 [node name="Sword" type="Sprite2D" parent="." unique_id=1962040483]
+visible = false
 position = Vector2(-3, -10)
 texture = ExtResource("5_htcer")
 offset = Vector2(0, -5)

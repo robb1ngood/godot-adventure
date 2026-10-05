@@ -6,6 +6,7 @@ class_name Player
 @export var acceleration: float = 10
 
 var is_attacking: bool = false
+var can_interact: bool = false
 
 func _ready():
 	update_treasure_label()
@@ -24,7 +25,7 @@ func _physics_process(delta):
 	
 	update_treasure_label()
 	
-	if Input.is_action_just_pressed("interact"):
+	if Input.is_action_just_pressed("interact") and not can_interact:
 		attack()
 	
 	move_and_slide()
@@ -75,10 +76,12 @@ func update_treasure_label():
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("interactable"):
+		can_interact = true
 		body.can_interact = true
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("interactable"):
+		can_interact = false
 		body.can_interact = false
 
 func _on_hitbox_area_2d_body_entered(body: Node2D) -> void:
@@ -92,6 +95,16 @@ func _on_hitbox_area_2d_body_entered(body: Node2D) -> void:
 	
 	var knockback_strength: float = 200
 	velocity += knockback_direction * knockback_strength
+	
+	$DamageSFX.play()
+	
+	var flash_white_color: Color = Color(50, 50, 50)
+	modulate = flash_white_color
+	
+	await get_tree().create_timer(0.2).timeout
+	
+	var original_color: Color = Color(1, 1, 1)
+	modulate = original_color
 	
 func die():
 	$AnimatedSprite2D.play("death")
@@ -124,6 +137,8 @@ func attack():
 	is_attacking = true
 	velocity = Vector2(0, 0)
 	
+	$AttackSFX.play()
+	
 	var player_animation: String = $AnimatedSprite2D.animation
 	if player_animation == "move_right":
 		$AnimatedSprite2D.play("attack_right")
@@ -146,15 +161,13 @@ func _on_sword_area_2d_body_entered(body: Node2D) -> void:
 	
 	body.velocity += knockback_direction * knockback_strength
 	
-	body.HP -= 1
-	if body.HP <= 0:
-		body.queue_free()
+	body.take_damage()
 	
 func _on_attack_duration_timer_timeout() -> void:
 	$Sword.visible = false
 	%SwordArea2D.monitoring = false
 	is_attacking = false
-
+	
 	var player_animation: String = $AnimatedSprite2D.animation
 	if player_animation == "attack_right":
 		$AnimatedSprite2D.play("move_right")
